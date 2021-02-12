@@ -65,23 +65,19 @@ vonage.number.search(
 
 const buyNumber = (res, result) => {
   const phone = res.numbers[0].msisdn
-  /*
+  
 vonage.number.buy('FR', phone, (err, res) => {
+  console.log(res.numbers[0].msisdn)
   if (err) {
     console.error(err)
   }
   else {
-    return response.status(200).send({
+    return result.status(200).send({
       text: 'Comande ok !',
-      number
+      phone: phone
     });
   }
-})*/
-console.log(res.numbers[0].msisdn)
-return result.status(200).send({
-  text: 'Comande ok !',
-  phone: phone
-});
+})
 }
 
 // STRIPES
