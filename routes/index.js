@@ -67,7 +67,6 @@ const buyNumber = (res, result) => {
   const phone = res.numbers[0].msisdn
   
 vonage.number.buy('FR', phone, (err, res) => {
-  console.log(res.numbers[0].msisdn)
   if (err) {
     console.error(err)
   }
