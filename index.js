@@ -50,7 +50,8 @@ function handleInboundSms(request, response) {
   const params = Object.assign(request.query, request.body)
   console.log(params)
   response.status(204).send()
-  db.query('SELECT * FROM command WHERE phone_vonage ?', ['33644631275'], (error, dbResult) => {
+  let phone = '33644631275'
+  db.query('SELECT * FROM command WHERE phone_vonage ?', [phone], (error, dbResult) => {
     console.log(dbResult)
     if (error) {
       return result(error, null);
