@@ -64,23 +64,19 @@ function handleInboundSms(request, response) {
 }
 
 const sendSms = (phone, text, vonage_phone) => {
-    vonage.channel.send(
-      { "type": "sms", "number": phone },
-      { "type": "sms", "number": vonage_phone },
-      {
-        "content": {
-          "type": "text",
-          "text": `${text}`
-        }
-      },
-      (err, data) => {
-        if (err) {
-          console.error(err);
-        } else {
-          console.log(data.message_uuid);
-        }
+  vonage.message.sendSms(vonage_phone, phone, text, {
+    type: "unicode"
+  }, (err, responseData) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (responseData.messages[0]['status'] === "0") {
+        console.log("Message sent successfully.");
+      } else {
+        console.log(`Message failed with error: ${responseData.messages[0]['error-text']}`);
       }
-    );
+    }
+  })
   }
 
 
