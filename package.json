@@ -22,7 +22,7 @@
     "prettier": "^1.19.1"
   },
   "dependencies": {
-    "@vonage/server-sdk": "^2.10.5-beta-2",
+    "@vonage/server-sdk": "^2.10.0",
     "bcrypt": "^3.0.8",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
