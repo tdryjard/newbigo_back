@@ -56,7 +56,9 @@ function handleInboundSms(request, response) {
     if (error) {
       return result(error, null);
     } else {
-        sendSms(dbResult.phone_client, params.text, params.to)
+      const phone_client = dbResult[dbResult.length -1].phone_client
+      console.log(phone_client)
+        sendSms(phone_client, params.text, params.to)
     }
 
   });
