@@ -23,13 +23,6 @@ router.use(cookieParser());
 
 // ROUTES
 
-const Command = function createCommand(command) {
-  this.phone_vonage = command.phone_vonage;
-  this.phone_client = command.phone_client;
-  this.service = command.service;
-  this.customer_id = command.customer_id;
-}
-
 router.use('/payment/paypal', cors({ credentials: true, origin: process.env.ORIGIN_URL }), async (req, result) => {
   
   searchNumber(result)
@@ -64,7 +57,6 @@ vonage.number.search(
 
 const buyNumber = (res, result) => {
   const phone = res.numbers[0].msisdn
-  /*
 vonage.number.buy('US', phone, (err, res) => {
   if (err) {
     console.error(err)
@@ -84,21 +76,7 @@ vonage.number.buy('US', phone, (err, res) => {
       phone: phone
     });
   }
-})*/
-
-db.query('SELECT * FROM credit', (error, dbResult) => {
-  console.log(dbResult)
-  if(dbResult && dbResult[0]){
-    const newPrice = dbResult[0].stock - 0.9
-    db.query('UPDATE credit SET stock = ?', [`${newPrice}`], (error, dbResult) => {
-      console.log(dbResult)
-    });
-  }
-});
-return result.status(200).send({
-  text: 'Comande ok !',
-  phone: phone
-});
+})
 }
 
 // STRIPES
@@ -114,28 +92,14 @@ router.use('/create-customer', cors({ credentials: true, origin: process.env.ORI
 });
 
 router.use('/create-subscription', cors({ credentials: true, origin: process.env.ORIGIN_URL }), async (req, result) => {
-  try {
-    await stripe.paymentMethods.attach(req.body.paymentMethodId, {
-      customer: req.body.customerId,
-    });
-  } catch (error) {
-    return result.status('402').send({ error: { message: error.message } });
-  }
-  await stripe.customers.update(
-    req.body.customerId,
-    {
-      invoice_settings: {
-        default_payment_method: req.body.paymentMethodId,
-      },
-    }
-  );
+  
   const intent = await stripe.paymentIntents.create({
     amount: parseInt(5 * 100),
     currency: 'eur',
     customer: req.body.customerId,
     payment_method_types: ['card']
   });
-  searchNumber(result)
+  result.json({ client_secret: intent.client_secret });
 });
 
 
