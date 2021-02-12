@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const router = express.Router();
 const Vonage = require('@vonage/server-sdk')
+const db = require('../models/database')
 
 const command = require('./command/command.route')
 
