@@ -66,7 +66,7 @@ vonage.number.search(
 const buyNumber = (res, result) => {
   const phone = res.numbers[0].msisdn
   
-vonage.number.buy('FR', phone, (err, res) => {
+vonage.number.buy('US', phone, (err, res) => {
   if (err) {
     console.error(err)
   }
