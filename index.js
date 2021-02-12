@@ -71,6 +71,9 @@ const sendSms = (phone, text, vonage_phone) => {
       console.log(err);
     } else {
       if (responseData.messages[0]['status'] === "0") {
+        console.log(responseData)
+        console.log(text)
+        console.log(vonage_phone)
         console.log("Message sent successfully.");
       } else {
         console.log(`Message failed with error: ${responseData.messages[0]['error-text']}`);
