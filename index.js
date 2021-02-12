@@ -6,13 +6,14 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const db = require('./models/database')
 const Vonage = require('@vonage/server-sdk')
+const VONAGE_APPLICATION_PRIVATE_KEY_PATH = `./${process.env.VONAGE_APPLICATION_PRIVATE_KEY_PATH}`
 
 
 const vonage = new Vonage({
   apiKey: process.env.VONAGE_API_KEY,
   apiSecret: process.env.VONAGE_API_SECRET,
   applicationId: process.env.VONAGE_APP_ID,
-  privateKey: process.env.VONAGE_APP_PRIVATE_KEY
+  privateKey: VONAGE_APPLICATION_PRIVATE_KEY_PATH
 })
 
 const port = process.env.PORT || 8000
