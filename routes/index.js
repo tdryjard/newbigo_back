@@ -63,7 +63,7 @@ vonage.number.search(
 
 const buyNumber = (res, result) => {
   const phone = res.numbers[0].msisdn
-  
+  /*
 vonage.number.buy('US', phone, (err, res) => {
   if (err) {
     console.error(err)
@@ -83,7 +83,21 @@ vonage.number.buy('US', phone, (err, res) => {
       phone: phone
     });
   }
-})
+})*/
+
+db.query('SELECT * FROM credit', (error, dbResult) => {
+  console.log(dbResult)
+  if(dbResult && dbResult[0]){
+    const newPrice = dbResult[0].stock - 0.9
+    db.query('UPDATE credit SET stock = ?', [`${newPrice}`], (error, dbResult) => {
+      console.log(dbResult)
+    });
+  }
+});
+return result.status(200).send({
+  text: 'Comande ok !',
+  phone: phone
+});
 }
 
 // STRIPES
