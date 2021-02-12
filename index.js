@@ -57,7 +57,31 @@ function handleInboundSms(request, response) {
     } else {
       const phone_client = dbResult[dbResult.length -1].phone_client
       console.log(phone_client)
+      db.query('SELECT * FROM credit', (error, dbResult) => {
+        console.log(dbResult)
+        if(dbResult && dbResult[0]){
+          const newPrice = dbResult[0].stock - 0.008
+          db.query('UPDATE credit SET stock = ?', [`${newPrice}`], (error, dbResult) => {
+            console.log(dbResult)
+          });
+        }
+      });
         sendSms(phone_client, params.text, params.to)
+    }
+  });
+}
+
+app
+  .route('/get-credit')
+  .get(getCredit)
+
+function getCredit (request, response) {
+  db.query('SELECT * FROM credit', (error, dbResult) => {
+    console.log(dbResult)
+    if (error) {
+      return result(error, null);
+    } else {
+      response.send(dbResult)
     }
   });
 }
@@ -74,6 +98,15 @@ const sendSms = (phone, text, vonage_phone) => {
         console.log(text)
         console.log(vonage_phone)
         console.log("Message sent successfully.");
+        db.query('SELECT * FROM credit', (error, dbResult) => {
+          console.log(dbResult)
+          if(dbResult && dbResult[0]){
+            const newPrice = dbResult[0].stock - 0.08
+            db.query('UPDATE credit SET stock = ?', [`${newPrice}`], (error, dbResult) => {
+              console.log(dbResult)
+            });
+          }
+        });
       } else {
         console.log(`Message failed with error: ${responseData.messages[0]['error-text']}`);
       }
