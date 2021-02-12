@@ -40,7 +40,7 @@ router.use('/command', cors({ credentials: true, origin: process.env.ORIGIN_URL 
 
 const searchNumber = (result) => {
 vonage.number.search(
-  'FR',
+  'US',
   {
     type: 'mobile-lvn',
     pattern: '6',
