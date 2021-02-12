@@ -26,58 +26,50 @@ router.use('/command', cors({ credentials: true, origin: process.env.ORIGIN_URL 
 
 // VONAGE
 
-router.use('/search-number', cors({ credentials: true, origin: process.env.ORIGIN_URL }), async (req, res) => {
+const searchNumber = (result) => {
 vonage.number.search(
-  COUNTRY_CODE,
+  'FR',
   {
-    type: VONAGE_NUMBER_TYPE,
-    pattern: NUMBER_SEARCH_CRITERIA,
-    search_pattern: NUMBER_SEARCH_PATTERN,
-    features: VONAGE_NUMBER_FEATURES
+    type: 'mobile-lvn',
+    pattern: '6',
+    search_pattern: '1',
+    features: 'SMS',
   },
   (err, res) => {
     if (err) {
       console.error(err)
     }
     else {
+      console.log(res)
       console.log(`Here are ${res.numbers.length} of the ${res.count} matching numbers available for purchase:`)
       res.numbers.forEach((number) => {
         console.log(`Tel: ${number.msisdn} Cost: ${number.cost}`)
       })
+      buyNumber(res, result)
     }
   }
 )
-})
+}
 
-router.use('/buy-number', cors({ credentials: true, origin: process.env.ORIGIN_URL }), async (req, res) => {
-vonage.number.buy(COUNTRY_CODE, VONAGE_NUMBER, (err, res) => {
+const buyNumber = (res, result) => {
+  const phone = res.numbers[0].msisdn
+  /*
+vonage.number.buy('FR', phone, (err, res) => {
   if (err) {
     console.error(err)
   }
   else {
-    console.log(JSON.stringify(res, null, 2))
+    return response.status(200).send({
+      text: 'Comande ok !',
+      number
+    });
   }
-})
-})
-
-const sendSms = () => {
-  vonage.channel.send(
-    { "type": "sms", "number": TO_NUMBER },
-    { "type": "sms", "number": FROM_NUMBER },
-    {
-      "content": {
-        "type": "text",
-        "text": "This is an SMS text message sent using the Messages API"
-      }
-    },
-    (err, data) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(data.message_uuid);
-      }
-    }
-  );
+})*/
+console.log(res.numbers[0].msisdn)
+return result.status(200).send({
+  text: 'Comande ok !',
+  phone: phone
+});
 }
 
 // STRIPES
@@ -85,21 +77,20 @@ const sendSms = () => {
 router.use('/create-customer', cors({ credentials: true, origin: process.env.ORIGIN_URL }), async (req, res) => {
   // Create a new customer object
   const customer = await stripe.customers.create({
-    email: req.body.email,
-    name: req.body.name
+    phone: req.body.phone
   });
 
   // Recommendation: save the customer.id in your database.
   res.send({ customer });
 });
 
-router.use('/create-subscription', cors({ credentials: true, origin: process.env.ORIGIN_URL }), async (req, res) => {
+router.use('/create-subscription', cors({ credentials: true, origin: process.env.ORIGIN_URL }), async (req, result) => {
   try {
     await stripe.paymentMethods.attach(req.body.paymentMethodId, {
       customer: req.body.customerId,
     });
   } catch (error) {
-    return res.status('402').send({ error: { message: error.message } });
+    return result.status('402').send({ error: { message: error.message } });
   }
   await stripe.customers.update(
     req.body.customerId,
@@ -109,12 +100,13 @@ router.use('/create-subscription', cors({ credentials: true, origin: process.env
       },
     }
   );
-  const subscription = await stripe.subscriptions.create({
+  const intent = await stripe.paymentIntents.create({
+    amount: parseInt(5 * 100),
+    currency: 'eur',
     customer: req.body.customerId,
-    items: [{ price: req.body.priceId }],
-    expand: ['latest_invoice.payment_intent'],
+    payment_method_types: ['card']
   });
-  res.send(subscription);
+  searchNumber(result)
 });
 
 

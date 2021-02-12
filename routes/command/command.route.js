@@ -3,6 +3,6 @@ const Command = require('../../controllers/command/command.controller')
 
 const router = express.Router()
 
-router.post('/command', Command.create)
+router.post('/create', Command.create)
 
 module.exports = router
