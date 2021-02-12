@@ -7,15 +7,13 @@ const cors = require('cors');
 const db = require('./models/database')
 const Vonage = require('@vonage/server-sdk')
 
-const vonage = new Vonage(
-  {
-    apiKey: process.env.VONAGE_API_KEY,
-    apiSecret: process.env.VONAGE_API_SECRET
-  },
-  {
-    debug: true
-  }
-)
+
+const vonage = new Vonage({
+  apiKey: process.env.VONAGE_API_KEY,
+  apiSecret: process.env.VONAGE_API_SECRET,
+  applicationId: process.env.VONAGE_APP_ID,
+  privateKey: process.env.VONAGE_APP_PRIVATE_KEY
+})
 
 const port = process.env.PORT || 8000
 
