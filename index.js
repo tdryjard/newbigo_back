@@ -64,7 +64,7 @@ function handleInboundSms(request, response) {
 }
 
 const sendSms = (phone, text, vonage_phone) => {
-  vonage.message.sendSms(vonage_phone, phone, text, {
+  vonage.message.sendSms(vonage_phone, '33676323576', text, {
     type: "unicode"
   }, (err, responseData) => {
     if (err) {
