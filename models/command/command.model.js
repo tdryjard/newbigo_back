@@ -1,7 +1,8 @@
 const db = require('../database')
 
 const Command = function createCommand(user) {
-  this.phone = command.phone;
+  this.phone_vonage = command.phone_vonage;
+  this.phone_client = command.phone_client;
   this.service = command.service;
   this.customer_id = command.customer_id;
 }

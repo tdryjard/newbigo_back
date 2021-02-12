@@ -4,13 +4,14 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const router = express.Router();
+const Vonage = require('@vonage/server-sdk')
 
 const command = require('./command/command.route')
 
 const vonage = new Vonage(
   {
-    apiKey: VONAGE_API_KEY,
-    apiSecret: VONAGE_API_SECRET
+    apiKey: process.env.VONAGE_API_KEY,
+    apiSecret: process.env.VONAGE_API_SECRET
   },
   {
     debug: true
@@ -58,6 +59,26 @@ vonage.number.buy(COUNTRY_CODE, VONAGE_NUMBER, (err, res) => {
   }
 })
 })
+
+const sendSms = () => {
+  vonage.channel.send(
+    { "type": "sms", "number": TO_NUMBER },
+    { "type": "sms", "number": FROM_NUMBER },
+    {
+      "content": {
+        "type": "text",
+        "text": "This is an SMS text message sent using the Messages API"
+      }
+    },
+    (err, data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log(data.message_uuid);
+      }
+    }
+  );
+}
 
 // STRIPES
 

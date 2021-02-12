@@ -4,14 +4,16 @@ const Command = require('../../models/command/command.model');
 // Creer un nouvel utilisateur
 exports.create = function createCommand(request, response) {
   const {
-    phone,
+    phone_vonage,
+    phone_client,
       service,
       customer_id
   } = request.body;
 
   // Creer un utilisateur
   const command = new Command({
-    phone: phone || null,
+    phone_vonage: phone_vonage || null,
+    phone_client: phone_client || null,
     service: service || null,
     customer_id: customer_id || null
   });

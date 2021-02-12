@@ -29,5 +29,16 @@ app.use(bodyParser.urlencoded({
 
 app.use('/api', api);
 
+app
+  .route('/receipt-sms')
+  .get(handleInboundSms)
+  .post(handleInboundSms)
+
+function handleInboundSms(request, response) {
+  const params = Object.assign(request.query, request.body)
+  console.log(params)
+  response.status(204).send()
+}
+
 
 app.listen(port, () => console.log(`Server is running on port ${port}.`));
