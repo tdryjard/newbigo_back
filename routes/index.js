@@ -43,8 +43,6 @@ vonage.number.search(
   'US',
   {
     type: 'mobile-lvn',
-    pattern: '6',
-    search_pattern: '1',
     features: 'SMS',
   },
   (err, res) => {
