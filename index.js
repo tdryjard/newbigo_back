@@ -59,7 +59,6 @@ function handleInboundSms(request, response) {
       console.log(phone_client)
         sendSms(phone_client, params.text, params.to)
     }
-
   });
 }
 

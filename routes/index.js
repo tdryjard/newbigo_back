@@ -22,6 +22,18 @@ router.use(cookieParser());
 
 // ROUTES
 
+const Command = function createCommand(command) {
+  this.phone_vonage = command.phone_vonage;
+  this.phone_client = command.phone_client;
+  this.service = command.service;
+  this.customer_id = command.customer_id;
+}
+
+router.use('/payment/paypal', cors({ credentials: true, origin: process.env.ORIGIN_URL }), async (req, result) => {
+  
+  searchNumber(result)
+});
+
 router.use('/command', cors({ credentials: true, origin: process.env.ORIGIN_URL }), command)
 
 // VONAGE
